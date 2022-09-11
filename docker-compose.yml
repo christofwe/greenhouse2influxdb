@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  greenhouse2influxdb:
+    build: .
+    container_name: greenhouse2influxdb
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - INFLUXDB_URL=$INFLUXDB_URL
+      - INFLUXDB_TOKEN=$INFLUXDB_TOKEN
+      - INFLUXDB_ORG=$INFLUXDB_ORG
+      - INFLUXDB_BUCKET=$INFLUXDB_BUCKET
+      - GREENHOUSE_API_IP=$GREENHOUSE_API_IP
+      - TZ=$TZ
+    command: '/bin/sh -c "while sleep $UPDATE_INTERVAL; do python /app/greenhouse2influxdb.py; done"'
